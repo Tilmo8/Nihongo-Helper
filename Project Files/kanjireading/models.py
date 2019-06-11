@@ -1,8 +1,17 @@
 from django.db import models
 
 # Create your models here.
+class Reading(models.Model):
+
+    """ Database Fields """
+    pronounciation = models.CharField(max_length=255, blank=False)
+
+    """ ToString Method """
+    def __str__(self):
+        return self.pronounciation
+
 class Kanji(models.Model):
-    # Choices
+    """ Choices """
     N5 = 'N5'
     N4 = 'N4'
     N3 = 'N3'
@@ -16,7 +25,7 @@ class Kanji(models.Model):
         (N1, 'N1')
     ]
 
-    # Database Fields
+    """ Database Fields """
     kanji = models.CharField(
         null = False,
         blank = False,
@@ -30,35 +39,40 @@ class Kanji(models.Model):
         max_length = 2  
     )
 
-    onyomi = models.CharField(blank = True, max_length=255)
-    kunyomi = models.CharField(blank = True, max_length=255)
+    # For all possible readings (ONYOMI and KUNYOMI combined)
+    readings = models.ManyToManyField('Reading', related_name='kanji', through='KanjiReading', through_fields=('kanji', 'reading'))
 
     subtitle = models.CharField(blank = False, max_length=255) # 玉 = jewel
     meanings = models.CharField(blank = False, max_length=255) # 玉 = jewel; ball
 
-    # Meta Class
+    """ Meta Class """
     class Meta:
         verbose_name = 'kanji'
         verbose_name_plural = 'kanji'
 
-    # ToString Method
+    """ ToString Method """
     def __str__ (self):
         return self.kanji
 
-class Reading(models.Model):
+class KanjiReading(models.Model):
     KUNYOMI = 'KU';
     ONYOMI = 'ON';
 
     YOMI_TYPES = [
-        (KUNYOMI, 'Kun')
+        (KUNYOMI, 'Kunyomi'),
+        (ONYOMI, 'Onyomi')
     ]
 
-    # Database Fields
-    kanji = models.ForeignKey(Kanji, on_delete=models.CASCADE)
+    kanji = models.ForeignKey('Kanji', related_name='kanji_readings', on_delete=models.SET_NULL, null=True)
+    reading = models.ForeignKey('Reading', related_name='kanji_list', on_delete=models.SET_NULL, null=True, blank=True)
     yomi_type = models.CharField(max_length=2, choices=YOMI_TYPES, blank=False)
 
-    reading = models.CharField(max_length=255, blank=False)
 
-    # ToString Method
+    """ Meta Class """
+    class Meta:
+        verbose_name = "KanjiReading"
+        verbose_name_plural = "KanjiReadings"
+
+    """ ToString Method """
     def __str__(self):
-        return "" + self.kanji + " (" + self.yomi_type + "): " + self.reading
+        return self.kanji.kanji + "(" + self.yomi_type + "): " + self.reading.pronounciation  
