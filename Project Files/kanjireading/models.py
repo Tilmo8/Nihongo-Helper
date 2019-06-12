@@ -10,6 +10,21 @@ class Reading(models.Model):
     def __str__(self):
         return self.pronounciation
 
+    """ Other Methods """
+    def get_kanji_list(self, kanji_only=True):
+        kanji_listing = []
+
+        for reading in self.kanji_list.all():
+            if kanji_only:
+                item = reading.kanji.kanji
+            else:
+                item = ( reading.kanji.kanji, reading.yomi_type )
+
+            kanji_listing.append(item)
+
+        return kanji_listing
+
+
 class Kanji(models.Model):
     """ Choices """
     N5 = 'N5'
@@ -75,4 +90,4 @@ class KanjiReading(models.Model):
 
     """ ToString Method """
     def __str__(self):
-        return self.kanji.kanji + "(" + self.yomi_type + "): " + self.reading.pronounciation  
+        return "(" + self.yomi_type + "): " + self.reading.pronounciation  
