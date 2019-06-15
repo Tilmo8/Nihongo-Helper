@@ -44,6 +44,7 @@ class Kanji(models.Model):
     kanji = models.CharField(
         null = False,
         blank = False,
+        unique = True,
         max_length = 1
     )
 
