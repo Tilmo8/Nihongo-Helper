@@ -4,7 +4,7 @@ from django.db import models
 class Reading(models.Model):
 
     """ Database Fields """
-    pronounciation = models.CharField(max_length=255, blank=False)
+    pronounciation = models.CharField(max_length=255, blank=False, unique=True)
 
     """ ToString Method """
     def __str__(self):
@@ -68,6 +68,29 @@ class Kanji(models.Model):
     """ ToString Method """
     def __str__ (self):
         return self.kanji
+
+    """ Other Methods """
+    # Returns a readings list of strings
+    def get_readings(self, yomi_type=None):
+        if yomi_type not in [KanjiReading.KUNYOMI, KanjiReading.ONYOMI, None]:
+            raise ValueError("Parameter must be KanjiReading.KUNYOMI,  KanjiReading.ONYOMI, or None")
+
+        reading_list = []
+
+        if yomi_type is None:
+            reading_list = list(self.readings.all())
+        else:
+            for item in self.kanji_readings.filter(yomi_type__exact=yomi_type):
+                reading_list.append(item.reading)
+
+        return reading_list
+
+    def get_onyomi_readings(self):
+        return self.get_readings(KanjiReading.ONYOMI)
+
+    def get_kunyomi_readings(self):
+        return self.get_readings(KanjiReading.KUNYOMI)
+
 
 class KanjiReading(models.Model):
     KUNYOMI = 'KU';
