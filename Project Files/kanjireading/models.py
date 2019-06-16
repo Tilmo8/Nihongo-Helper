@@ -2,7 +2,6 @@ from django.db import models
 
 # Create your models here.
 class Reading(models.Model):
-
     """ Database Fields """
     pronounciation = models.CharField(max_length=255, blank=False, unique=True)
 
@@ -16,14 +15,13 @@ class Reading(models.Model):
 
         for reading in self.kanji_list.all():
             if kanji_only:
-                item = reading.kanji.kanji
+                item = reading.kanji.character
             else:
-                item = ( reading.kanji.kanji, reading.yomi_type )
+                item = ( reading.kanji.character, reading.yomi_type )
 
             kanji_listing.append(item)
 
         return kanji_listing
-
 
 class Kanji(models.Model):
     """ Choices """
@@ -41,7 +39,7 @@ class Kanji(models.Model):
     ]
 
     """ Database Fields """
-    kanji = models.CharField(
+    character = models.CharField(
         null = False,
         blank = False,
         unique = True,
@@ -68,7 +66,7 @@ class Kanji(models.Model):
 
     """ ToString Method """
     def __str__ (self):
-        return self.kanji
+        return self.character
 
     """ Other Methods """
     # Returns a readings list of strings
@@ -94,6 +92,7 @@ class Kanji(models.Model):
 
 
 class KanjiReading(models.Model):
+    """ Choices """
     KUNYOMI = 'KU';
     ONYOMI = 'ON';
 
@@ -102,6 +101,7 @@ class KanjiReading(models.Model):
         (ONYOMI, 'Onyomi')
     ]
 
+    """ Database Fields """
     kanji = models.ForeignKey('Kanji', related_name='kanji_readings', on_delete=models.SET_NULL, null=True)
     reading = models.ForeignKey('Reading', related_name='kanji_list', on_delete=models.SET_NULL, null=True, blank=True)
     yomi_type = models.CharField(max_length=2, choices=YOMI_TYPES, blank=False)
