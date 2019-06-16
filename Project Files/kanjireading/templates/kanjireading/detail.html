@@ -1,0 +1,9 @@
+{% if kanji %}
+	<h1>{{ kanji.character }}</h1>
+	<h2>{{ kanji.subtitle }}</h2>
+	<br>
+
+	<div>{{ kanji.meanings }}</div>
+{% else %}
+	<h1>Kanji does not exist</h1>
+{% endif %}
