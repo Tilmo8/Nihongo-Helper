@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, get_list_or_404
 from django.http import HttpResponse, Http404	# Remove later if HttpResponse is not needed
 from django.template import loader
 
@@ -12,36 +12,25 @@ def index(request):
 
 def detail(request, kanji):
 	if not isinstance(kanji, Kanji):
-		kanji_lookup = Kanji.objects.filter(character__exact=kanji)
+		kanji = get_object_or_404(Kanji, character=kanji)
 
-		if not kanji_lookup.exists():
-			raise Http404("Kanji not found")
-		else:
-			kanji = kanji_lookup[0]
-
-	template = loader.get_template('kanjireading/detail.html')
 	context = {
-		'kanji': kanji
+		'kanji': kanji,
+		'complete_details': True,
 	}
 
-	return HttpResponse(template.render(context, request))
-	# return HttpResponse(f"<h1>HAI, you're looking at kanji: {kanji.character} <h1>")
+	return render(request, 'kanjireading/detail.html', context)
 
 def random_kanji(request):
-	kanji_list = list(Kanji.objects.all())
-
-	list_length = len(kanji_list)
-
-	if list_length <= 0:
-		raise Http404("Kanji not found")
+	kanji_list = get_list_or_404(Kanji)
 
 	kanji = Random.choice(kanji_list)
 
-	template = loader.get_template('kanjireading/detail.html')
 	context = {
-		'kanji': kanji
+		'kanji': kanji,
+		'complete_details': False,
 	}
 
-	return HttpResponse(template.render(context, request))
+	return render(request, 'kanjireading/detail.html', context)
 
 

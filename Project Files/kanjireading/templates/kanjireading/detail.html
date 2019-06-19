@@ -1,9 +1,21 @@
-{% if kanji %}
-	<h1>{{ kanji.character }}</h1>
-	<h2>{{ kanji.subtitle }}</h2>
-	<br>
+<div>
+	{% if kanji %}
+		<h1>{{ kanji.character }}</h1>
+		<h2>{{ kanji.subtitle }}</h2>
+		<br>
 
-	<div>{{ kanji.meanings }}</div>
-{% else %}
-	<h1>Kanji does not exist</h1>
-{% endif %}
+		<div>{{ kanji.meanings }}</div>
+
+		{% if complete_details %}
+		<ul>
+			{% for item in kanji.get_readings %}
+				<li>{{ item.pronounciation }}</li>
+			{% empty %}
+				<li>Empty</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+	{% else %}
+		<h1>Kanji does not exist</h1>
+	{% endif %}
+</div>
