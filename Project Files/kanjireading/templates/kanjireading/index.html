@@ -1,0 +1,13 @@
+<div>
+	Test success. Rendered "kanji-reading.index".
+</div>
+
+<a href="{% url 'kanji:random' %}">Random Kanji</a>
+
+<ul>
+	{% for kanji in kanji_list %}
+		<li>
+			<a href="{% url 'kanji:detail' kanji %}">{{ kanji.character }}</a>
+		</li>
+	{% endfor %}
+</ul>

@@ -8,7 +8,12 @@ import random as Random
 
 # Create your views here.
 def index(request):
-	return HttpResponse("Test success. Rendered \"kanji-reading.index\".")
+	context = {
+		'kanji_list': list(Kanji.objects.all())
+	}
+	print(context['kanji_list'])
+
+	return render(request, 'kanjireading/index.html', context)
 
 def detail(request, kanji):
 	if not isinstance(kanji, Kanji):
