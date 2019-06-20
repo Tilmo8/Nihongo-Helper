@@ -4,10 +4,15 @@
 
 <a href="{% url 'kanji:random' %}">Random Kanji</a>
 
-<ul>
-	{% for kanji in kanji_list %}
-		<li>
-			<a href="{% url 'kanji:detail' kanji %}">{{ kanji.character }}</a>
-		</li>
-	{% endfor %}
-</ul>
+{% for label, kanji_list in kanji_data %}
+	{% if kanji_list %}
+		<h3>{{ label }}</h3>
+		<ul>		
+			{% for kanji in kanji_list %}
+				<li>
+					<a href="{% url 'kanji:detail' kanji %}">{{ kanji.character }}</a>
+				</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endfor %}

@@ -8,10 +8,14 @@ import random as Random
 
 # Create your views here.
 def index(request):
+	data_set = []
+
+	for value, label in Kanji.JLPT_LEVELS:
+		data_set.append((label, list(Kanji.objects.filter(jlpt_level=value))))
+
 	context = {
-		'kanji_list': list(Kanji.objects.all())
+		'kanji_data': data_set
 	}
-	print(context['kanji_list'])
 
 	return render(request, 'kanjireading/index.html', context)
 
