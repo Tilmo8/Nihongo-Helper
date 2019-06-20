@@ -2,18 +2,13 @@
 	{% if kanji %}
 		<h1>{{ kanji.character }}</h1>
 		<h2>{{ kanji.subtitle }}</h2>
+		
 		<br>
 
 		<div>{{ kanji.meanings }}</div>
 
 		{% if complete_details %}
-		<!-- {# <ul>
-			{% for item in kanji.get_readings %}
-				<li>{{ item.pronounciation }}</li>
-			{% empty %}
-				<li>Empty</li>
-			{% endfor %}
-		</ul> #} -->
+
 			{% for label, readings in reading_sets %}
 				{% if readings %}
 					<h4>{{ label }}</h4>
