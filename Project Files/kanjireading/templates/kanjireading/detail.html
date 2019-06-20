@@ -7,13 +7,25 @@
 		<div>{{ kanji.meanings }}</div>
 
 		{% if complete_details %}
-		<ul>
+		<!-- {# <ul>
 			{% for item in kanji.get_readings %}
 				<li>{{ item.pronounciation }}</li>
 			{% empty %}
 				<li>Empty</li>
 			{% endfor %}
-		</ul>
+		</ul> #} -->
+			{% for label, readings in reading_sets %}
+				{% if readings %}
+					<h4>{{ label }}</h4>
+
+					<ul>
+						{% for reading in readings  %}
+							<li>{{ reading }}</li>
+						{% endfor %}
+					</ul>
+				{% endif %}
+			{% endfor %}
+
 		{% endif %}
 	{% else %}
 		<h1>Kanji does not exist</h1>

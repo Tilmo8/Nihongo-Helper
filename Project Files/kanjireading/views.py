@@ -25,6 +25,10 @@ def detail(request, kanji):
 
 	context = {
 		'kanji': kanji,
+		'reading_sets': [
+			('Onyomi', kanji.get_onyomi_readings()),
+			('Kunyomi', kanji.get_kunyomi_readings()),
+		],
 		'complete_details': True,
 	}
 
